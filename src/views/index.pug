@@ -3,6 +3,7 @@ html
 	head
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
 	body
+		include outnavbar.pug
 		if user
 			a(href='/profile') view profile
 			br
@@ -23,7 +24,7 @@ html
 					//p Password
 					input(type='password' id='password' name='password' required=true placeholder="password")
 				p
-					input(type='submit' value='Sign in' id='submit')
+					input(type='submit' value='Sign In' id='submit')
 					hr
 
 		h2#error-message= message

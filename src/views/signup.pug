@@ -3,22 +3,19 @@ html
 	head
 		title Sign Up
 	body
-		if user
-			a(href='/profile') view profile
+		include outnavbar.pug
+		h2 Create your account
+		form(action='/addnewuser', method='post')
+			p 
+			input(type='text' id='user' name='user' required=true placeholder="Username")
 			br
-			a(href='/logout') log out
-		else
-			form(action='/addnewuser' method='post')
-				label
-					p User name
-					input(type='text' id='user' name='user' required=true placeholder="your funny name")
-				label
-					p Email
-					input(type='email' id='email' name='email' required=true placeholder="name@mail.com")
-				label
-					p Password
-					input(type='password' id='password' name='password' required=true)
-				p
-					input(type='submit' value='Sign Up')
+			p 
+			input(type='email' id='email' name='email' required=true placeholder="email@mail.com")
+			br
+			p 
+			input(type='password' id='password' name='password' required=true placeholder="password")
+			br
+			p
+			input(type='submit', value='Sign Up')
 
 		h2#error-message= message

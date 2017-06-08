@@ -16,16 +16,10 @@ var sequelize = new Sequelize('blog', process.env.POSTGRES_USER, process.env.POS
     }
 });
 
-
 const Cars = sequelize.define('autos', {
     kleur: Sequelize.STRING,
     prijs: Sequelize.INTEGER
 });
-
-
-
-
-
 
 var User = sequelize.define('user', {
     name: Sequelize.STRING,
@@ -55,13 +49,25 @@ app.get('/signup', function (request, response) {
     response.render('signup');
 });
 
+app.get('/about', function (request, response) {
+    response.render('about');
+});
+
+app.get('/home', function (request, response) {
+    response.render('home');
+});
+
 app.post('/addnewuser', function(request, response) {
  //check bestaand adres, maybe.findOne?   
+    console.log("reached")
     User.create({
         name: request.body.user,
         email: request.body.email,
         password: request.body.password
-    });
+    })
+    .catch(err => {
+        console.log(err)
+    })
     response.redirect('/');
 });
 
@@ -87,7 +93,7 @@ app.post('/login', bodyParser.urlencoded({extended: true}), function (request, r
         if (user !== null && request.body.password === user.password) {
             request.session.user = user; //session starts when you log in
             response.redirect('/profile');
-        } else {
+        } else { //! dit bericht wordt niet op het scherm gelogd, niet duidelijk wat de user verkeerd heeft gedaan
             response.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
         }
     }, function (error) { //beter to use .catch ipv deze functie
@@ -118,6 +124,7 @@ sequelize.sync({force: false}).then(function () {
     var server = app.listen(3000, function () {
         console.log('Example app listening on port: ' + server.address().port);
     });
+})
     /*
     Promise.all([
         Cars.create({
@@ -139,7 +146,3 @@ sequelize.sync({force: false}).then(function () {
         });
     });
     */
-}, function (error) { // use .catch
-    console.log('sync failed: ');
-    console.log(error);
-});
