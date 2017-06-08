@@ -1,7 +1,29 @@
+doctype html
 html
 	head
-		title= 'Niets hier'
+		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
 	body
-		p= 'main page'
-		h1= message
-		p= user
+		if user
+			a(href='/profile') view profile
+			br
+			a(href='/logout') log out
+		else
+			form(action='/signup' method='get')
+				p
+					h1 Sing up new users
+					input(type='submit' value='Sign Up')
+				hr
+
+			form(action='/login' method='post')
+				label
+					h1 Login existing users
+					//p Email
+					input(type='email' id='email' name='email' required=true placeholder="email@mail.com")
+				label
+					//p Password
+					input(type='password' id='password' name='password' required=true placeholder="password")
+				p
+					input(type='submit' value='Sign in' id='submit')
+					hr
+
+		h2#error-message= message
