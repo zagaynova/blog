@@ -7,7 +7,6 @@ var connectionString = 'postgres://' + process.env.POSTGRES_USER + ':' + process
 
 console.log(connectionString)
 
-
 var sequelize = new Sequelize('blog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
     host: 'localhost',
     dialect: 'postgres',
@@ -26,6 +25,22 @@ var User = sequelize.define('user', {
     email: Sequelize.STRING,
     password: Sequelize.STRING
 });
+
+var Post = sequelize.define('post', {
+    body: Sequelize.STRING,
+    userId: Sequelize.INTEGER
+});
+
+var Comment = sequelize.define('comment', {
+    body: Sequelize.STRING
+});
+
+User.hasMany(Post);
+User.hasMany(Comment);
+Post.hasMany(Comment);
+Post.belongsTo(User);
+Comment.belongsTo(User);
+Comment.belongsTo(Post);
 
 var app = express();
 
@@ -57,6 +72,29 @@ app.get('/home', function (request, response) {
     response.render('home');
 });
 
+app.get('/allposts', function (request, response) {
+    console.log(request.session.user);
+    // var testposts = [{username: "opa", body: "ik ben thuis"}, {username: "oma", body: "leuk"}];
+    
+    Post.findAll().then(function (all) {
+        console.log(all);
+        response.render('allposts', {posts: all});
+   
+    });
+
+   // response.render('/allposts', {posts: testposts});
+});
+
+app.post('/postblog', function (request, response) {
+    Post.create({
+        body: request.body.blogpost,
+        userId: request.session.user.id
+    }).then(function (user) {
+        response.redirect('allposts');
+    });
+    
+});
+
 app.post('/addnewuser', function(request, response) {
  //check bestaand adres, maybe.findOne?   
     console.log("reached")
@@ -64,8 +102,7 @@ app.post('/addnewuser', function(request, response) {
         name: request.body.user,
         email: request.body.email,
         password: request.body.password
-    })
-    .catch(err => {
+    }).catch(err => {
         console.log(err)
     })
     response.redirect('/');
@@ -101,7 +138,7 @@ app.post('/login', bodyParser.urlencoded({extended: true}), function (request, r
     });
 });
 
-app.get('/logout', function (request, response) {
+app.get('/signout', function (request, response) {
     request.session.destroy(function(error) { // finishing session
         if(error) {
             throw error;

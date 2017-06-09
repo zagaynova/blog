@@ -4,4 +4,16 @@ html
 		title All Posts
 
 	body
-		include outnavbar.pug
+		include navbar.pug
+	div(style='padding-left:100px;')
+		form(action='/postblog' method='post')
+				label
+					h1 Write new blog post
+					//p Email
+					input(type='text' id='blogpost' name='blogpost' required=true placeholder="write smth here")
+				p
+					input(type='submit' value='Post' id='submit')
+					hr
+		each post in posts
+			p= post.username
+			p= post.body

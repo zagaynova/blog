@@ -4,18 +4,19 @@ html
 		title Sign Up
 	body
 		include outnavbar.pug
+	div(style='padding-left:100px;')
 		h2 Create your account
 		form(action='/addnewuser', method='post')
 			p 
-			input(type='text' id='user' name='user' required=true placeholder="Username")
+				input(type='text' id='user' name='user' required=true placeholder="Username")
 			br
 			p 
-			input(type='email' id='email' name='email' required=true placeholder="email@mail.com")
+				input(type='email' id='email' name='email' required=true placeholder="email@mail.com")
 			br
 			p 
-			input(type='password' id='password' name='password' required=true placeholder="password")
+				input(type='password' id='password' name='password' required=true placeholder="password")
 			br
 			p
-			input(type='submit', value='Sign Up')
+				input(type='submit', value='Sign Up')
 
 		h2#error-message= message
