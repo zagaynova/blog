@@ -1,6 +1,22 @@
 doctype html
 html
 	head
+		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+		script.
+			$(document).ready(function() {
+				function hideAllComments() {
+					$(".commentbutton").parent().next().hide();
+					$(".commentbutton").parent().show();
+				}
+
+				hideAllComments();
+				
+				$(".commentbutton").click(function() {
+					hideAllComments();
+					$(this).parent().hide();
+					$(this).parent().next().show();
+				});
+			});
 		title All Posts
 
 	body
@@ -14,6 +30,30 @@ html
 				p
 					input(type='submit' value='Post' id='submit')
 					hr
-		each post in posts
-			p= post.username
-			p= post.body
+		table
+			each post in posts
+				tr
+					td= post.user.name
+					td &nbsp;
+					td= post.body
+				tr
+					td &nbsp;
+					td &nbsp;
+					- var x = post.comments.length
+					td(id=post.id, class="commentbutton") #{x} comments
+				tr
+					td &nbsp;
+					td &nbsp;
+					td
+						table
+							each comment in post.comments
+								tr
+									td= comment.user.name
+									td &nbsp;
+									td= comment.body
+						form(action='/addcomment' method='post')
+							input(type="hidden", name="postid", value=post.id)
+							input(type="text", name="comment", placeholder="Comment")
+							input(type="submit")
+					
+

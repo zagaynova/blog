@@ -73,13 +73,39 @@ app.get('/home', function (request, response) {
 });
 
 app.get('/allposts', function (request, response) {
-    console.log(request.session.user);
-    // var testposts = [{username: "opa", body: "ik ben thuis"}, {username: "oma", body: "leuk"}];
-    
-    Post.findAll().then(function (all) {
-        console.log(all);
+    Post.findAll({
+        include: [
+            User,
+            { model: Comment, include: User } 
+        ],
+        order: [
+            ['id', 'DESC'],
+            [ Comment, 'id', 'ASC']
+        ]
+    }).then(function (all) {
         response.render('allposts', {posts: all});
-   
+    });
+
+   // response.render('/allposts', {posts: testposts});
+});
+
+
+app.get('/myposts', function (request, response) {
+    console.log(request.session.user)
+    Post.findAll({
+        where: {
+            userId: request.session.user.id
+        },
+        include: [
+            User,
+            { model: Comment, include: User } 
+        ],
+        order: [
+            ['id', 'DESC'],
+            [ Comment, 'id', 'ASC']
+        ]
+    }).then(function (myposts) {
+        response.render('allposts', {posts: myposts});
     });
 
    // response.render('/allposts', {posts: testposts});
@@ -95,9 +121,20 @@ app.post('/postblog', function (request, response) {
     
 });
 
+app.post('/addcomment', function (request, response) {
+    Comment.create({
+        body: request.body.comment,
+        postId: request.body.postid,
+        userId: request.session.user.id
+    }).then(function (user) {
+        response.redirect('allposts');
+    });
+    
+});
+
 app.post('/addnewuser', function(request, response) {
  //check bestaand adres, maybe.findOne?   
-    console.log("reached")
+    //console.log("reached")
     User.create({
         name: request.body.user,
         email: request.body.email,
