@@ -4,17 +4,17 @@ html
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
 		script.
 			$(document).ready(function() {
-				function hideAllComments() {
-					$(".commentbutton").parent().next().hide();
-					$(".commentbutton").parent().show();
+				function hideAllComments(time) {
+					$(".commentbutton").parent().next().hide(0);
+					$(".commentbutton").parent().show(time);
 				}
 
-				hideAllComments();
+				hideAllComments(0);
 				
 				$(".commentbutton").click(function() {
-					hideAllComments();
-					$(this).parent().hide();
-					$(this).parent().next().show();
+					hideAllComments(500);
+					$(this).parent().hide(0);
+					$(this).parent().next().show(500);
 				});
 			});
 		title All Posts
