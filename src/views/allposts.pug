@@ -10,7 +10,7 @@ html
 				}
 
 				hideAllComments(0);
-				
+
 				$(".commentbutton").click(function() {
 					hideAllComments(500);
 					$(this).parent().hide(0);
@@ -25,8 +25,7 @@ html
 		form(action='/postblog' method='post')
 				label
 					h1 Write new blog post
-					//p Email
-					input(type='text' id='blogpost' name='blogpost' required=true placeholder="write smth here")
+					input(type='text' id='blogpost' name='blogpost' required=true placeholder="write smth here" autofocus="true")
 				p
 					input(type='submit' value='Post' id='submit')
 					hr
