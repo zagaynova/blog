@@ -119,7 +119,7 @@ app.post('/addnewuser', function(request, response) {
             console.log(error);
         } else {
             User.create({
-                name: request.body.name,
+                name: request.body.user,
                 email: request.body.email,
                 password: hash
             }).catch(err => {
